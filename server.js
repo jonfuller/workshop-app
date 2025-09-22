@@ -23,7 +23,10 @@ app.use(express.static(path.join(__dirname)));
 // Generate QR code for joining
 app.get('/qr', async (req, res) => {
     try {
-        const joinUrl = `http://localhost:${PORT}/?mode=participant`;
+        const baseUrl = process.env.NODE_ENV === 'production' 
+            ? `https://${req.get('host')}`
+            : `http://localhost:${PORT}`;
+        const joinUrl = `${baseUrl}/?mode=participant`;
         const qr = await QRCode.toDataURL(joinUrl);
         res.json({ qr, url: joinUrl });
     } catch (err) {
