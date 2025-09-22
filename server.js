@@ -47,6 +47,10 @@ wss.on('connection', (ws, req) => {
         }
     });
     
+    ws.on('ping', () => {
+        ws.pong();
+    });
+    
     ws.on('close', () => {
         // Remove participant when they disconnect
         for (let [id, participant] of workshopState.participants) {
@@ -75,6 +79,9 @@ function handleMessage(ws, data) {
             break;
         case 'request_state':
             sendCurrentState(ws);
+            break;
+        case 'ping':
+            ws.send(JSON.stringify({ type: 'pong' }));
             break;
     }
 }

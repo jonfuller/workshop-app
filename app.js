@@ -36,27 +36,131 @@ class WorkshopApp {
     }
 
     setupWebSocket() {
+        if (this.ws && this.ws.readyState === WebSocket.CONNECTING) {
+            return; // Already connecting
+        }
+        
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${protocol}//${window.location.host}`;
         
         this.ws = new WebSocket(wsUrl);
+        this.reconnectAttempts = 0;
         
         this.ws.onopen = () => {
             console.log('Connected to workshop server');
-            if (this.mode === 'master') {
+            this.reconnectAttempts = 0;
+            this.showConnectionStatus('connected');
+            
+            // Re-join if we were a participant
+            if (this.mode === 'participant' && this.participantName && !this.participantId) {
+                this.rejoinWorkshop();
+            } else if (this.mode === 'master') {
                 this.ws.send(JSON.stringify({ type: 'request_state' }));
+                this.loadQRCode(); // Load QR code on connection
             }
+            
+            this.startHeartbeat();
         };
         
         this.ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
+            if (data.type === 'pong') {
+                this.lastPong = Date.now();
+                return;
+            }
             this.handleWebSocketMessage(data);
         };
         
-        this.ws.onclose = () => {
-            console.log('Disconnected from workshop server');
-            setTimeout(() => this.setupWebSocket(), 3000); // Reconnect after 3 seconds
+        this.ws.onclose = (event) => {
+            console.log('Disconnected from workshop server', event.code, event.reason);
+            this.showConnectionStatus('disconnected');
+            this.stopHeartbeat();
+            this.scheduleReconnect();
         };
+        
+        this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            this.showConnectionStatus('error');
+        };
+    }
+
+    scheduleReconnect() {
+        if (this.reconnectTimeout) {
+            clearTimeout(this.reconnectTimeout);
+        }
+        
+        // Exponential backoff: 1s, 2s, 4s, 8s, max 30s
+        const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
+        this.reconnectAttempts++;
+        
+        console.log(`Attempting reconnection in ${delay}ms (attempt ${this.reconnectAttempts})`);
+        this.showConnectionStatus('reconnecting', delay);
+        
+        this.reconnectTimeout = setTimeout(() => {
+            this.setupWebSocket();
+        }, delay);
+    }
+
+    startHeartbeat() {
+        this.stopHeartbeat();
+        this.lastPong = Date.now();
+        
+        this.pingInterval = setInterval(() => {
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.ws.send(JSON.stringify({ type: 'ping' }));
+                
+                // Check if we haven't received a pong in 10 seconds
+                if (Date.now() - this.lastPong > 10000) {
+                    console.log('Connection seems dead, reconnecting...');
+                    this.ws.close();
+                }
+            }
+        }, 5000); // Ping every 5 seconds
+    }
+
+    stopHeartbeat() {
+        if (this.pingInterval) {
+            clearInterval(this.pingInterval);
+            this.pingInterval = null;
+        }
+    }
+
+    showConnectionStatus(status, reconnectDelay = 0) {
+        // Show connection status to user
+        let statusElement = document.getElementById('connection-status');
+        if (!statusElement) {
+            statusElement = document.createElement('div');
+            statusElement.id = 'connection-status';
+            statusElement.className = 'connection-status';
+            document.body.appendChild(statusElement);
+        }
+
+        switch (status) {
+            case 'connected':
+                statusElement.textContent = '';
+                statusElement.className = 'connection-status hidden';
+                break;
+            case 'disconnected':
+                statusElement.textContent = 'Disconnected from server';
+                statusElement.className = 'connection-status error';
+                break;
+            case 'reconnecting':
+                statusElement.textContent = `Reconnecting in ${Math.ceil(reconnectDelay / 1000)}s...`;
+                statusElement.className = 'connection-status warning';
+                break;
+            case 'error':
+                statusElement.textContent = 'Connection error';
+                statusElement.className = 'connection-status error';
+                break;
+        }
+    }
+
+    rejoinWorkshop() {
+        // Re-join with saved name
+        this.ws.send(JSON.stringify({
+            type: 'join',
+            name: this.participantName
+        }));
     }
 
     handleWebSocketMessage(data) {
@@ -296,22 +400,19 @@ class WorkshopApp {
         }
     }
 
-    async showQRCode() {
+    async loadQRCode() {
+        if (this.mode !== 'master') return;
+        
         try {
             const response = await fetch('/qr');
             const data = await response.json();
             
-            document.getElementById('qr-code-container').innerHTML = `<img src="${data.qr}" alt="QR Code">`;
-            document.getElementById('join-url').textContent = data.url;
-            document.getElementById('qr-modal').style.display = 'block';
+            document.getElementById('qr-code-display').innerHTML = `<img src="${data.qr}" alt="QR Code">`;
+            document.getElementById('join-url-display').textContent = data.url;
         } catch (error) {
             console.error('Failed to load QR code:', error);
-            alert('Failed to load QR code');
+            document.getElementById('qr-code-display').innerHTML = '<p>Failed to load QR code</p>';
         }
-    }
-
-    closeQRCode() {
-        document.getElementById('qr-modal').style.display = 'none';
     }
 
     showError(message) {
@@ -344,13 +445,7 @@ function nextStepMaster() {
     app.nextStepMaster();
 }
 
-function showQRCode() {
-    app.showQRCode();
-}
-
-function closeQRCode() {
-    app.closeQRCode();
-}
+// QR code functions no longer needed
 
 // Initialize app when page loads
 document.addEventListener('DOMContentLoaded', () => {

@@ -368,7 +368,7 @@ footer {
 
 .master-main {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 300px 1fr 2fr;
     gap: 30px;
     margin-bottom: 30px;
 }
@@ -517,6 +517,73 @@ footer {
     word-break: break-all;
     color: #2d3748;
     border: 1px solid #e2e8f0;
+}
+
+/* QR Section Styles */
+.qr-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.qr-section h3 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+#qr-code-display img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.join-url-display {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(237, 242, 247, 0.6);
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.8em;
+    word-break: break-all;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+/* Connection Status */
+.connection-status {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.connection-status.hidden {
+    display: none;
+}
+
+.connection-status.error {
+    background: #e53e3e;
+    animation: pulse 2s infinite;
+}
+
+.connection-status.warning {
+    background: #dd6b20;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
 }
 
 /* Responsive Design */
