@@ -1,0 +1,41 @@
+{
+  "workshopTitle": "Vibecoding Workshop Setup",
+  "steps": [
+    {
+      "id": 1,
+      "title": "Install Node.js",
+      "description": "Download and install Node.js from nodejs.org. Verify installation by running 'node --version' in your terminal.",
+      "estimatedTime": "5 minutes"
+    },
+    {
+      "id": 2,
+      "title": "Install Git",
+      "description": "Download and install Git from git-scm.com. Verify installation by running 'git --version' in your terminal.",
+      "estimatedTime": "3 minutes"
+    },
+    {
+      "id": 3,
+      "title": "Set up Code Editor",
+      "description": "Install Visual Studio Code or your preferred code editor. Install recommended extensions for JavaScript/TypeScript development.",
+      "estimatedTime": "5 minutes"
+    },
+    {
+      "id": 4,
+      "title": "Clone Workshop Repository",
+      "description": "Clone the workshop repository using 'git clone [repo-url]' and navigate to the project directory.",
+      "estimatedTime": "2 minutes"
+    },
+    {
+      "id": 5,
+      "title": "Install Dependencies",
+      "description": "Run 'npm install' or 'yarn install' in the project directory to install all required dependencies.",
+      "estimatedTime": "3 minutes"
+    },
+    {
+      "id": 6,
+      "title": "Verify Setup",
+      "description": "Run 'npm start' or 'yarn start' to ensure the development server starts successfully.",
+      "estimatedTime": "2 minutes"
+    }
+  ]
+}

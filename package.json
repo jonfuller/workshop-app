@@ -1,0 +1,19 @@
+{
+  "name": "vibecoding-workshop",
+  "version": "1.0.0",
+  "description": "Workshop setup tracker",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "python3 serve.py"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2",
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {},
+  "keywords": ["workshop", "setup", "tracker"],
+  "author": "",
+  "license": "MIT"
+}

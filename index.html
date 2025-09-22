@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibecoding Workshop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Join Modal -->
+    <div id="join-modal" class="modal">
+        <div class="modal-content">
+            <h2>Join Workshop</h2>
+            <input type="text" id="participant-name" placeholder="Enter your name" maxlength="50">
+            <button onclick="joinWorkshop()" id="join-btn">Join</button>
+        </div>
+    </div>
+
+    <!-- Master View -->
+    <div id="master-view" class="container">
+        <header>
+            <h1 id="workshop-title">Loading...</h1>
+            <div class="master-controls">
+                <button onclick="showQRCode()" class="qr-btn">Show QR Code</button>
+                <button onclick="previousStepMaster()" class="nav-btn">Previous Step</button>
+                <button onclick="nextStepMaster()" class="nav-btn">Next Step</button>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <p class="progress-text" id="progress-text">0 participants</p>
+        </header>
+
+        <main class="master-main">
+            <div class="current-step-master">
+                <h2 id="step-title-master">Loading step...</h2>
+                <p class="step-description" id="step-description-master">Please wait while we load the workshop steps.</p>
+                <p class="estimated-time" id="estimated-time-master"></p>
+            </div>
+
+            <div class="participants-grid" id="participants-grid">
+                <h3>Participants</h3>
+                <div class="participants-list" id="participants-list">
+                    <p class="empty-state">No participants yet. Share the QR code!</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Participant View -->
+    <div id="participant-view" class="container">
+        <header>
+            <h1 id="workshop-title-participant">Loading...</h1>
+            <p class="participant-name" id="participant-name-display"></p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill-participant"></div>
+            </div>
+            <p class="progress-text" id="progress-text-participant">0 of 0 steps completed</p>
+        </header>
+
+        <main>
+            <div class="current-step" id="current-step-participant">
+                <h2 id="step-title-participant">Loading step...</h2>
+                <p class="step-description" id="step-description-participant">Please wait while we load the workshop steps.</p>
+                <p class="estimated-time" id="estimated-time-participant"></p>
+                <button class="complete-btn" id="complete-btn-participant" onclick="completeCurrentStep()" disabled>
+                    Mark as Complete
+                </button>
+            </div>
+
+            <div class="steps-overview">
+                <h3>All Steps</h3>
+                <ul class="steps-list" id="steps-list-participant">
+                    <!-- Steps will be loaded here -->
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeQRCode()">&times;</span>
+            <h2>Join Workshop</h2>
+            <div id="qr-code-container">
+                <p>Loading QR code...</p>
+            </div>
+            <p class="join-url" id="join-url"></p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
