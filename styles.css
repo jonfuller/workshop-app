@@ -368,7 +368,7 @@ footer {
 
 .master-main {
     display: grid;
-    grid-template-columns: 300px 1fr 2fr;
+    grid-template-columns: 1fr 2fr;
     gap: 30px;
     margin-bottom: 30px;
 }
@@ -519,20 +519,39 @@ footer {
     border: 1px solid #e2e8f0;
 }
 
-/* QR Section Styles */
-.qr-section {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 25px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    text-align: center;
+/* Header Layout */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 30px;
 }
 
-.qr-section h3 {
+.header-left {
+    flex: 1;
+}
+
+.header-left h1 {
+    margin-bottom: 15px;
+}
+
+/* QR Section in Header */
+.qr-section-header {
+    background: rgba(247, 250, 252, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid rgba(102, 126, 234, 0.1);
+    min-width: 250px;
+    max-width: 300px;
+}
+
+.qr-section-header h3 {
     color: #2d3748;
     margin-bottom: 15px;
-    font-size: 1.2em;
+    font-size: 1.1em;
+    font-weight: 600;
 }
 
 #qr-code-display img {
@@ -543,15 +562,16 @@ footer {
 }
 
 .join-url-display {
-    margin-top: 15px;
-    padding: 10px;
-    background: rgba(237, 242, 247, 0.6);
+    margin-top: 12px;
+    padding: 8px;
+    background: rgba(237, 242, 247, 0.8);
     border-radius: 6px;
     font-family: monospace;
-    font-size: 0.8em;
+    font-size: 0.75em;
     word-break: break-all;
     color: #4a5568;
     border: 1px solid #e2e8f0;
+    line-height: 1.2;
 }
 
 /* Connection Status */
@@ -596,6 +616,16 @@ footer {
     .master-main {
         grid-template-columns: 1fr;
         gap: 20px;
+    }
+    
+    .header-top {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .qr-section-header {
+        max-width: none;
+        min-width: auto;
     }
     
     header h1 {

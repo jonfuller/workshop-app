@@ -19,10 +19,21 @@
     <!-- Master View -->
     <div id="master-view" class="container">
         <header>
-            <h1 id="workshop-title">Loading...</h1>
-            <div class="master-controls">
-                <button onclick="previousStepMaster()" class="nav-btn">Previous Step</button>
-                <button onclick="nextStepMaster()" class="nav-btn">Next Step</button>
+            <div class="header-top">
+                <div class="header-left">
+                    <h1 id="workshop-title">Loading...</h1>
+                    <div class="master-controls">
+                        <button onclick="previousStepMaster()" class="nav-btn">Previous Step</button>
+                        <button onclick="nextStepMaster()" class="nav-btn">Next Step</button>
+                    </div>
+                </div>
+                <div class="qr-section-header">
+                    <h3>Join Workshop</h3>
+                    <div id="qr-code-display">
+                        <p>Loading QR code...</p>
+                    </div>
+                    <p class="join-url-display" id="join-url-display"></p>
+                </div>
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progress-fill"></div>
@@ -31,14 +42,6 @@
         </header>
 
         <main class="master-main">
-            <div class="qr-section">
-                <h3>Join Workshop</h3>
-                <div id="qr-code-display">
-                    <p>Loading QR code...</p>
-                </div>
-                <p class="join-url-display" id="join-url-display"></p>
-            </div>
-
             <div class="current-step-master">
                 <h2 id="step-title-master">Loading step...</h2>
                 <p class="step-description" id="step-description-master">Please wait while we load the workshop steps.</p>
